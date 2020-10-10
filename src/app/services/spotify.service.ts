@@ -4,15 +4,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class SpotifyService implements OnInit{
 
   url: string = 'http://localhost:3000/spotify/02cc28d7d1c943ebb57d2a3665fc7eca/f7c9ea1478ce4258b1c65d8953cc1cd2';
-
-  token: string = 'BQC6GUKArE73zpcClprSo_mQO5C5xFUg0C9nre6eg97yTSeUIDqD-A5KVXNWvmVrrGPVmv2NLZzi9fmQ2ic';
+  
+  token: string = localStorage.getItem("token");
   
   constructor( private http: HttpClient ) {
   
@@ -20,23 +19,24 @@ export class SpotifyService implements OnInit{
 
       this.http.get(this.url).subscribe((data: any) => {
             this.token = data.access_token;
-           
+            //console.log(this.token);
       });
        
+      console.log(this.token);
    }
    
    getToken() {
-    
       return this.http.get(this.url);
    }
 
+   
    setToken( tokenComp: string ){
      this.token = tokenComp;
    }
 
+   
    getQuery( query: string ){
            
-        
         const url = `https://api.spotify.com/v1/${ query }`;
 
         const headers = new HttpHeaders({

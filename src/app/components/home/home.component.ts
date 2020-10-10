@@ -6,6 +6,8 @@ import { SpotifyService } from 'src/app/services/spotify.service';
   templateUrl: './home.component.html',
   styles: []
 })
+
+
 export class HomeComponent implements OnInit{
   
   token: string;
@@ -16,13 +18,12 @@ export class HomeComponent implements OnInit{
   error: boolean;
   mensajeError: string;
   
+  
   constructor(  private spotify: SpotifyService ) { 
 
     this.loading = true;
     this.error = false;
-
     
-  
     this.spotify.getNewReleases()
                 .subscribe( (data: any) => {
                     this.nuevasCanciones = data;
@@ -39,15 +40,19 @@ export class HomeComponent implements OnInit{
   setToken(){
     this.spotify.getToken().subscribe( (data: any) => {
       this.token = data.access_token;
+      
       //console.log(this.token);
       this.spotify.setToken(this.token);
+      localStorage.setItem("token", this.token);
     });
     
   }
 
   ngOnInit(){
-  
+    
     this.setToken();
+    setInterval(this.setToken, 36000);
+    
   }
   
 }
